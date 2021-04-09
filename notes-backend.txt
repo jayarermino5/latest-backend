@@ -1,0 +1,167 @@
+MERN Stack
+
+M - MongoDB - document database
+E - ExpressJS - NodeJS web framework
+R - ReactJS - a client-side Javascript framework
+N - NodeJS - the premier Javascript web server
+
+We also have MEAN and MEVN
+
+Prerequisites:
+	Javascript
+	MongoDB
+	ExpressJS - use to create API
+	ReactJS - 1 page application / no refresh of whole page
+	NodeJS
+
+Open VS Code
+
+Check if you have npm
+	npm --version
+
+Create a Github repository named 'user-profiling-backend' and clone it.
+
+cd 'user-profiling-backend'
+
+Talk about the pricing of MongoDB Atlas
+
+Create a MongoDB Atlas Account
+
+Create a free cluster
+
+Select a region (It must be near your location)
+
+Do not change anything na
+
+Click Create Cluster button and wait for the provisioning
+
+We will create a collection
+	Database Name: jermino		| database
+	Collection Name: users		| table
+	
+Click Create
+
+Click on Database Access and create a user
+	Username: admin
+	Password: admin123
+
+Click Create
+
+Click on Network Access and add a network or IP Addresses	| this is the reason why some users can't access their mongodb because no IP adress are allowed to access the database.
+
+Click Add an IP Address or Allow Access From Anywhere
+
+Click Update
+
+Back to our VS Code
+	npm init -y		| use to install libraries
+	
+Install some packages
+	npm i express cors mongoose dotenv
+	
+	express - lightweight web framework of nodejs use to create web applications or API
+	cors - (cross origin resource sharing) use to communicate to API with different domain, okay lang not to use cors if you have the same domain. its like a key for the application to request data to the API. we called it the middleware of applications use to allow cross platform requesting
+	mongoose -  nodejs package for connecting to mongodb
+	dotenv - use to install environment variables. will allow us to create a .env file, its like the setting for our environment
+	
+We will add the node_modules to our .gitignore file para dili maapil sa pagpush sa repository
+
+Create server.js under your repository
+
+We will create constants variables
+
+By the way, what is the different between var, const and let?
+	var - oldest way of instantiating variables in javascript until es6 or ecmascript was created
+	const - constant variable and should have a value at first
+	let - dili pa sure ang value, better than var
+	
+Add codes for server.js - 1st to 10th
+
+Run the server
+	node server
+
+We can use nodemon para hindi na magrestart		| nodemon monitors your folder and if it detects changes then it will restart the server
+	nodemon server
+
+To install nodemon
+	npm i nodemon -g	| -g for global
+
+Create server.js under your repository
+
+Go to MongoDB Atlas and click Connect then click Connect Your Application then copy the connection string and paste to .env file
+
+Add codes for .env
+
+Add codes for server.js - 11th to 15th
+
+dotenv is recommended for the security of your database.
+
+Under repository, create 2 folders name 'models' and 'routes'
+
+Lets start with our models, we will create a model Schema or blueprint of data - dito makikipagcommunicate si client or frontend gamit yung routes
+Si routes and models ay magkaconnect kaya the are always in pairs (so pares jud na sila)
+
+Create a new file under model folder named user.model.js
+
+Add codes for user.model.js - 1st to 5th
+
+Create a new file under routes name user.js
+
+Add codes for user.js - 1st to 6th
+
+So far we have MongoDB, Express and Node for our backend
+
+Add codes for user.js - 7th to 12th
+
+Add codes for server.js - 16th to 17th
+
+So we now have a backend and we will try to test it using Postman
+
+First execute the add request
+	request - POST
+	url - http://localhost:5000/user/add
+	parameters -> body -> raw -> json
+		{
+            "fullname": "Juan Dela Cruz",
+            "occupation": "Developer",
+            "email": "juan@email.com",
+            "phonenumber: "09123456789"
+        }
+
+	Click send
+
+Check MongoDB Atlas if there is a new document or record
+
+You can delete the user table and try to add, it will still create a table
+You may also rename the user into user3 then add, it will still create a table
+
+ALso try to check the Get request using Postman
+
+This backend is not just for ReactJS, it can also be use to other Frontend Frameworks as long as you know how to fetch an API
+
+Now let's add the update and delete
+
+Add codes for user.js - 13th to 15th
+
+Then let's test again for details
+	request - GET
+	url - http://localhost:5000/user/<id>
+
+Test update
+	request - POST
+	url - http://localhost:5000/user/update/<id>
+	parameters -> body -> raw -> json
+		{
+            "fullname": "Pedro Dela Cruz",
+            "occupation": "Developer",
+            "email": "pedro@email.com",
+            "phonenumber: "09123456789"
+        }
+
+	Click send
+
+Test delete
+	request - DELETE
+	url - http://localhost:5000/user/<id>
+
+And we are really done with our backend. Next topic will be our frontend this afternoon :)

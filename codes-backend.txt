@@ -1,0 +1,130 @@
+server.js codes
+    const express = require('express');     | 1st - calls express package
+    const cors = require('cors');   | 2nd - calls cors package
+    const mongoose = require('mongoose');   | 3rd - calls mongoose package
+
+    const UserRouter = require('./routes/user');    | 16th - we will import the user router
+
+    require('dotenv').config();     | 4th - calls dotenv package with the method of config or configuration
+
+    const app = express();      | 5th - creates an app or instance of express
+    const port = process.env.PORT || 5000;  | 6th - choose if there is a vacant PORT
+
+    app.use(cors());    | 7th - we will use our middleware which is cors
+    app.use(express.json());    | 8th - use to make the data of express into json as default
+
+    const uri = process.env.ATLAS_URI;      | 11th - get the mongodb connection string
+    mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true});     | 12th - use to connect to our mongodb with some settings because mongodb is always improving and some of the functions are deprecated or is false
+
+    const connection = mongoose.connection;     | 13th
+    connection.once('open', () => {     | 14th
+        console.log('MongoDB connection established.');     | 15th - check if we are connected to our mongodb
+    });
+
+    app.use('/user', UserRouter);   | 17th - gagamitin na natin yung routes
+
+    app.listen(port, () => {    | 9th - we will run the app using listen with an arrow function
+        console.log('Server is running at port: ' + port + '.');    | 10th - let's log if the server us running
+    });
+
+----------
+
+.env codes
+    ATLAS_URI = <connection-string>     | change password (admin123) and dbname (jermino)
+
+----------
+
+user.model.js
+    const mongoose = require('mongoose');   | 1st - calls mongoose package
+
+    const Schema = mongoose.Schema; | 2nd - instance of the Schema
+
+    const userSchema = new Schema({   | 3rd - let's create our schema/model/blueprint
+        fullname: {
+            type: String,
+            required: true,
+            trim: true      | removes whitespace on the inputs, naa man guy users nga space ra ang ibutang
+        },
+        occupation: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        email: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        phonenumber: {
+            type: String,
+            required: true,
+            trim: true
+        }                   | now we have a structure of our document or record (sql)
+    }, {
+        timestamps: true    | use to add timestamp like date created and date updated
+    });
+
+    const User = mongoose.model('user', userSchema);      | 4th - we will create a model named User from our Schema
+
+    module.exports = User;    | 5th - use to export the User para pwede na magamit kahit saan as import
+
+----------
+
+user.js
+    const router = require('express').Router();     | 1st - calls the built-in router
+    let User = require('../models/user.model');     | 2nd - we use let kasi pwede ma update yan ng ibang middleware, should not be const kasi pwede mag error .. this line will not work also if the model is not module.exports
+
+    // home     | adds the home route or url
+    router.route('/').get((req, res) => {   | 3rd - gawa tayo ng simpleng route... .get na function with an arrow function na susuplayan natin ng request and response variable
+        User.find()   | 4th - magquery tayo ng data from the user using find meaning find all data tapos magreturn yan ng promise kaya gagamit tayo ng .then
+            .then(user => res.json(user))   | 5th   - we will store the data in a callback variable na naka json format
+            .catch(err => res.status(400).json('Error: ' + err));   | 6th - we will also catch the error with the status 400 if there is error then display the error
+    });
+
+    // add      | adds the create user route or url
+    router.route('/add').post((req, res) => {   | 7th route for adding new user to our mongodb
+        const fullname = req.body.fullname;     | 8th dapat same sa model schema ang mga variables, bakit my body? kasi gagamit tayo ng axious na libary which means na manggagaling sa isang form yang mga data na yan or yung iinputan ng user
+        const occupation = req.body.occupation;
+        const email = req.body.email;
+        const phonenumber = req.body.phonenumber;
+
+        const newUser = new User({fullname, occupation, email, phonenumber});   | 8th - instantiate natin yung User galing sa model
+
+        newUser.save()     | 9th - we will save na sa ating mongodb
+            .then(user => res.json('New record added.'))      | 10th magrereturn din yan ng promise so iconsole na lang natin
+            .catch(err => res.status(400).json('Error: ' + err));   | 11th - we will also catch the error
+    });
+
+    // details
+    router.route('/:id').get((req, res) => {    | 13th - creating the details url
+        User.findById(req.params.id)    | para magkaroon ng ganito sa url: ?id=
+            .then(user => res.json(user))
+            .catch(err => res,status(400).json('Error:' + err))
+    })
+
+    // delete
+    router.route('/:id').delete((req, res) => {  | 14th - to delete a user
+        User.findByIdAndDelete(req.params.id)
+            .then(user => res.json('Record was deleted.'))
+            .catch(err => res.status(400).json('Error: ' + err));
+    });
+
+    // update
+    router.route('/update/:id').post((req, res) => {    | 15th - to update a user
+        User.findById(req.params.id)
+            .then(user => {
+                user.fullname = req.body.fullname;
+                user.occupation = req.body.occupation;
+                user.email = req.body.email;
+                user.phonenumber = req.body.phonenumber;
+
+                user.save()
+                    .then(user => res.json('Record was updated.'))
+                    .catch(err => res.status(400).json('Error: ' + err));
+            })
+            .catch(err => res.status(400).json('Error: ' + err));
+    });
+
+    module.exports = router;    | 12th - don't forget to export the router
+
+----------
