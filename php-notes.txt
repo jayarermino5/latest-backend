@@ -1,0 +1,188 @@
+PHP Basic to Advance
+
+Basic:
+
+Syntax
+Variables
+Echo/Print
+Data Types
+Strings
+Constants
+//Operators
+//If Else Statements
+//Switch
+//While Loops
+//For Loops
+
+Advance:
+
+Arrays
+Date and Time
+Functions
+Class
+OOP
+
+PHP (recursive acronym for PHP:Hypertext Preprocessor) is a widely-used open source general-purpose scripting language that is specially suited for web development and can be embedded into HTML.
+
+PHP was initial used to create Facebook.
+
+PHP vs Python
+
+touch index.php sa htdocs folder
+
+Syntax:
+	<?php
+	echo "Hello world";	| used to display
+	?>
+
+	// or # for comments
+		
+	<?= "Hello World";	| short-hand syntax for echo
+	
+echo vs print
+	- are the same
+	- echo has no return value while
+	print has a return value of 1 and is used to return function but not used na karon kasi return na yung ginagamit to return a value of a function
+	
+Variables:
+	$text = "Hello";
+	$number = 14;
+	$float = 1.1;
+	$boolean = true;
+	$array = array($text, $number, $float, $boolean);
+	
+	var_dump($text);
+	
+Strings:
+	concatenate - pagsasama ng mga variables
+		echo $text." ".$number;
+		
+	count the length of a data
+		echo strlen($text);
+		
+	count only letter
+		$old = str_replace(" ", "", $text);
+		echo strlen($old);
+		
+	get position of a string
+		echo strpos($text, "world");
+		
+	//tolower or toupper
+	strtolower($name);
+		
+Constants:
+	is like a variable but you can't change the value.
+	is also global anywhere in the script.
+	
+	define("Title", "PHP Tutorial", true);	| last parameter is for case-sensitive
+	
+	echo Title;
+	
+Operators:	
+	+, -, *, /, %, **
+	
+	=, +=
+	
+If Else Statements:
+	if($number == $number2) {
+		echo "True";
+	} else {
+		echo "False";
+	}
+	
+	=== - is used to check if identical which means same data type and same value.
+	
+	!= - is used to check if variables are not equal.
+	
+	!== - not identical
+	
+Switch:
+	switch($mango) {
+		case "yellow":
+			echo "Ripe Mango";
+			break;
+		case "green":
+			echo "Unripe Mango";
+			break;
+		default:
+			echo "No fruits":
+			break;
+	}
+	
+touch advance.php
+	
+Arrays:
+	$fruits = array("mango", "apple", "banana", "pineapple");
+	
+	// print the array
+	print_r(fruits);
+	
+	// print 1 item
+	echo $fruits[1];
+	
+	// array count
+	echo count($fruits);
+	
+	// array labeling
+	$fruits = array("mangga" => "mango);
+	print_r($fruits);
+	echo $fruits['mangga'];
+	
+	// sorting
+	$numbers = array(2,4,6,8,10,1,3,5,7,9);
+	sort($numbers);		| ascending
+	rsort($numbers);	| descending
+	
+	// filter or seach
+	if(in_array("mango", $fruits)) {
+		echo "there is a mango";
+	} else {
+		echo "no mango";
+	}
+	
+touch date_time.php
+
+Date and Time:	| go to php.net/manual to know more
+	echo date('Y-m-d h:i:s a');
+	
+	// timezone
+	echo date_default_timezone_get();
+	
+	//change timezone
+	date_default_timezone_set('Asia/Manila');
+	
+	// convert date and time
+	$date = 'September 14, 2029 03:54:00 AM';
+	echo date('Y-m-d h:i:s a', strtotime($date));
+	
+touch function.php
+
+Functions:
+	//how to declare
+	function PHPTutorial() {
+		echo "Welcome to our tutorial.";
+	}
+	
+	//how to call function
+	PHPTutorial();
+	
+	//return function
+	function PHPTutorial() {
+		return "Welcome to our tutorial.";
+	}
+	
+	//call return function
+	echo PHPTutorial();
+	
+	//sample of return function
+	function add($x, $y) {
+		return $x + $y;	
+	}
+	
+	echo add(1, 1);
+	
+touch main.php
+
+how to import files:
+	include_once("function.php");
+	
